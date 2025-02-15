@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  date     DateTime @default(now())
+  done      Boolean  @default(false)
+}
+
+model Group {
+  id        Int      @id @default(autoincrement()) 
+  groupid   String   @unique @default(uuid())
+  name      String                               
+  members   Member[]                              
+  logs      Log[]                               
+  createdAt DateTime @default(now())              
+}
+
+model Member {
+  id            Int                @id @default(autoincrement()) 
+  name          String                                
+  money         Int                                   
+  group         Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId       Int  
+  payments      Log[]  @relation("payer")  // 支払ったログ一覧（payer側リレーション）
+  participations LogParticipant[] @relation("participant") // 修正: リレーション名を追加
+}
+
+model Log {
+  id           Int         @id @default(autoincrement()) 
+  amount       Int                                    
+  payer        Member   @relation(fields: [payerId], references: [id], name: "payer") // 支払った人
+  payerId      Int                                    
+  createdAt    DateTime  @default(now())               
+  group        Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId      Int                                    
+  participants LogParticipant[]                    
+}
+
+model LogParticipant {
+  id       Int      @id @default(autoincrement()) 
+  log      Log      @relation(fields: [logId], references: [id], onDelete: Cascade)
+  logId    Int                                    
+  member   Member   @relation(fields: [memberId], references: [id], onDelete: Cascade, name: "participant") // 修正: 逆リレーション名を追加
+  memberId Int                                    
+  share    Float    @default(1.0)                  
+}
