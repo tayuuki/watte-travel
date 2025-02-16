@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // ルーティング用
+import { useRouter } from "next/navigation";
 import Header from "../components/header";
 
 export default function Group() {
@@ -50,41 +50,41 @@ export default function Group() {
   };
 
   return (
-    <div className="bg-gray-300">
+    <div className="bg-gray-200">
       <Header />
       <div className="flex justify-center w-screen h-screen">
-        <div className="flex flex-col items-center space-y-4 w-screen h-screen">
-          <p className="mt-20 text-xl text-black">旅行のタイトル</p>
+        <div className="flex flex-col items-center space-y-6 w-96 py-8 px-4 bg-white rounded-lg shadow-xl">
+          <p className="text-2xl text-gray-800">旅行のタイトル</p>
           <input
-            className="border p-2 w-1/2 rounded"
+            className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
             placeholder="タイトルを入力"
             value={groupTitle}
             onChange={(e) => setGroupTitle(e.target.value)}
           />
 
-          <p className="mt-10 text-xl text-black">名前の追加</p>
+          <p className="text-xl text-gray-800 mt-6">名前の追加</p>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border p-2 w-1/2 mb-2 rounded"
+            className="border p-3 w-full mb-3 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
             placeholder="名前を入力"
           />
 
           <button
             onClick={addName}
-            className="bg-blue-500 text-white px-4 py-2 rounded w-1/2 hover:bg-blue-600 transition"
+            className="bg-blue-500 text-white px-6 py-3 rounded-lg w-full hover:bg-blue-600 transition duration-300"
           >
             追加
           </button>
 
-          <ul className="mt-4 w-1/4 text-center">
+          <ul className="mt-4 w-full text-center space-y-3">
             {names.map((n, index) => (
-              <li key={index} className="flex items-center justify-between p-2 bg-white border-b">
-                <span className="mx-auto text-black">{n}</span>
+              <li key={index} className="flex justify-between items-center p-3 bg-gray-50 border rounded-lg shadow-md">
+                <span className="text-gray-800">{n}</span>
                 <button
                   onClick={() => removeName(index)}
-                  className="bg-red-500 text-black px-3 py-1 rounded hover:bg-red-600 transition"
+                  className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition duration-300"
                 >
                   削除
                 </button>
@@ -94,7 +94,7 @@ export default function Group() {
 
           <button
             onClick={createGroup}
-            className="mt-6 bg-green-500 text-white px-6 py-3 rounded w-1/2 hover:bg-green-600 transition"
+            className="mt-6 bg-green-500 text-white px-6 py-3 rounded-lg w-full hover:bg-green-600 transition duration-300"
           >
             グループを作成
           </button>

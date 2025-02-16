@@ -33,7 +33,7 @@ export default function GroupPage() {
   const handleCopy = () => {
     navigator.clipboard.writeText(currentUrl).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // 2秒後にリセット
+      setTimeout(() => setCopied(false), 2000);
     });
   };
 
@@ -60,7 +60,6 @@ export default function GroupPage() {
       <div className="flex justify-center">
         <div className="flex flex-col items-center space-y-6 w-screen h-screen mt-10">
           <h1 className="text-2xl font-bold text-black">{group.name}</h1>
-
           <h2 className="text-xl text-black">メンバー</h2>
           <ul className="bg-white p-4 rounded shadow w-1/2">
             {group.members.map((member) => (
@@ -70,6 +69,29 @@ export default function GroupPage() {
             ))}
           </ul>
 
+          <h2 className="text-xl text-black mt-6">精算すべき金額</h2>
+          {group.logs.length > 0 ? (
+            group.logs.map((log) => (
+              <div key={log.id} className="p-4 bg-white rounded shadow w-1/2 mb-4">
+                <p>{log.payer.name} が {log.amount} 円を支払いました</p>
+                <ul>
+                  {log.participants.map((participant) => {
+                    const participantName = group.members.find(
+                      (member) => member.id === participant.participantId
+                    )?.name; // オプショナルチェイニングを使用
+                    return participantName ? (
+                      <li key={participant.participantId} className="text-black">
+                        {participantName} → {log.payer.name} に {participant.amount} 円支払い
+                      </li>
+                    ) : null; // 名前がない場合は表示しない
+                  })}
+                </ul>
+              </div>
+            ))
+          ) : (
+            <p>支払い記録はありません。</p>
+          )}
+
           <Link href={`/group/${groupid}/split`}>
             <button className="outline-none disabled:opacity-50 border bg-white text-black font-bold py-4 text-base rounded-full w-48">
               割り勘を追加する
@@ -77,7 +99,7 @@ export default function GroupPage() {
           </Link>
 
           {/* URLコピー・共有ボタン */}
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 mt-4">
             <button
               onClick={handleCopy}
               className="bg-blue-500 text-white px-4 py-2 rounded w-36 hover:bg-blue-600 transition"

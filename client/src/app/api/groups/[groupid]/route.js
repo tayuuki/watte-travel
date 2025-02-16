@@ -4,11 +4,23 @@ const prisma = new PrismaClient();
 
 export async function GET(req, { params }) {
   try {
-    const { groupid } = params;
+    if (!params || !params.groupid) {
+      return new Response(JSON.stringify({ error: "無効なパラメータ" }), { status: 400 });
+    }
+
+    const groupid = params.groupid; // ここではawaitは不要
 
     const group = await prisma.group.findUnique({
       where: { groupid },
-      include: { members: true },
+      include: {
+        members: true,
+        logs: {
+          include: {
+            participants: true,
+            payer: true,
+          },
+        },
+      },
     });
 
     if (!group) {
