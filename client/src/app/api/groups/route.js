@@ -12,16 +12,17 @@ export async function POST(req) {
     }
 
     // ランダムな groupid を生成
-    const groupid = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+    // const groupid = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+    // console.log(`-===========`, groupid)
 
     // グループを作成
     const group = await prisma.group.create({
       data: {
-        groupid,
+        // groupid,
         name,
       },
     });
-
+    console.log(`-===========`, group)
     // メンバーを作成
     const memberPromises = members.map((memberName) =>
       prisma.member.create({
@@ -32,10 +33,12 @@ export async function POST(req) {
         },
       })
     );
+    console.log(`-===========`, memberPromises)
+
 
     await Promise.all(memberPromises);
 
-    return new Response(JSON.stringify({ groupid }), { status: 201 });
+    return new Response(JSON.stringify({ groupid: group.groupid }), { status: 201 });
   } catch (error) {
     console.error("Error creating group:", error);
     return new Response(JSON.stringify({ error: "サーバーエラー" }), { status: 500 });

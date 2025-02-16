@@ -12,8 +12,11 @@ export default function Split() {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [group, setGroup] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false); // 追加: 二重送信防止
-
-  // グループの情報とメンバーを取得する
+   // 各グループの金額を state で管理
+  // const [amounts, setAmounts] = useState({ 1: 0, 2: 0, 3: 0 });
+  // const [ratios, setRatios] = useState({ 1: 1, 2: 1, 3: 1 }); // 比率の初期値を1:1:1に設定
+  // const [activeTab, setActiveTab] = useState(1); // タブの切り替え
+  // const totalRatio = Object.values(ratios).reduce((sum, ratio) => sum + ratio, 0);
   useEffect(() => {
     const fetchGroupData = async () => {
       const res = await fetch(`/api/groups/${groupid}`);
